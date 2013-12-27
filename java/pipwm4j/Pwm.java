@@ -23,6 +23,15 @@ public class Pwm implements java.io.Closeable {
     }
 
     /**
+     * Sets PWM parameters
+     * @param span usecs that one period lasts
+     * @param fill usecs that is in high state during one period.  0 <= fill < span
+     */
+    public void setParams(long span, long fill) {
+	writeControlStructure(hControlStructure, span, fill, false);
+    }
+
+    /**
      * Sets the pin's state to high (true) or low (false)
      */
     public void setState(boolean state) {
