@@ -26,10 +26,21 @@ JNIEXPORT void JNICALL Java_pipwm4j_Pwm_freeControlStructure(JNIEnv *env, jobjec
     return;
 }
 
-JNIEXPORT void JNICALL Java_pipwm4j_Pwm_doPwm(JNIEnv *env, jobject thisObj, jlong controlStructure) {
-   printf("Starting thread!\n");
-   pthread_t t;
-    pthread_start(&t, NULL, pwmMain, NULL);
-   return;
+JNIEXPORT void JNICALL Java_pipwm4j_Pwm_writeControlStructure(JNIEnv *env, jobject thisObj, jlong hControlStructure, jlong span, jlong fill, jboolean stop) {
+    PwmControl * structure = (PwmControl *) hControlStructure;
+    structure->span = span;
+    structure->fill = fill;
+    structure->stop = stop;
+}
+
+
+JNIEXPORT void JNICALL Java_pipwm4j_Pwm_doPwm(JNIEnv *env, jobject thisObj, jlong hControlStructure) {
+    PwmControl * structure = (PwmControl *) hControlStructure;
+    printf("thread started for pin %d\n", structure->pin);
+    while (!structure->stop) {
+	usleep(1000);
+    }
+    printf("thread stopped for pin %d\n", structure->pin);
+    return;
 }
 
