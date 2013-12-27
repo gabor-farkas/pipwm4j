@@ -6,6 +6,10 @@ public class Pwm implements java.io.Closeable {
     protected int pin;
     protected Runner runner = new Runner();
 
+    /**
+     * Assigns the pin as a digital output
+     * @param pin The number of the pin. It should be reasonably between 1 and 27, but this class doesn't check anything
+     */
     public Pwm(int pin) {
 	this.pin = pin;
 	hControlStructure = allocateControlStructure(pin);
@@ -16,6 +20,13 @@ public class Pwm implements java.io.Closeable {
 	if (!runner.isAlive()) {
 	    runner.start();
 	}
+    }
+
+    /**
+     * Sets the pin's state to high (true) or low (false)
+     */
+    public void setState(boolean state) {
+	setPinState(pin, state);
     }
 
     public void close() {
@@ -37,6 +48,7 @@ public class Pwm implements java.io.Closeable {
     protected native void freeControlStructure(long hControlStructure);
     protected native void doPwm(long hControlStructure);
     protected native void writeControlStructure(long hControlStructure, long span, long fill, boolean stop);
+    protected native void setPinState(int pin, boolean state);
 
     protected class Runner extends Thread {
 	public void run() {

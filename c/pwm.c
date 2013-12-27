@@ -18,6 +18,7 @@ typedef struct PwmControl {
 JNIEXPORT jlong JNICALL Java_pipwm4j_Pwm_allocateControlStructure(JNIEnv *env, jobject thisObj, jint pin) {
     long structure = (long) malloc(sizeof(PwmControl));
     ((PwmControl *)structure)->pin = pin;
+    // todo allocate pin to output
     return (jlong) structure;
 }
 
@@ -33,12 +34,18 @@ JNIEXPORT void JNICALL Java_pipwm4j_Pwm_writeControlStructure(JNIEnv *env, jobje
     structure->stop = stop;
 }
 
+JNIEXPORT void JNICALL Java_pipwm4j_Pwm_setPinState(JNIEnv *env, jobject thisObj, jint pin, jboolean state) {
+    // todo set state
+}
 
 JNIEXPORT void JNICALL Java_pipwm4j_Pwm_doPwm(JNIEnv *env, jobject thisObj, jlong hControlStructure) {
     PwmControl * structure = (PwmControl *) hControlStructure;
     printf("thread started for pin %d\n", structure->pin);
     while (!structure->stop) {
-	usleep(1000);
+	// todo turn on pin
+	usleep(structure->fill);
+	// todo turn off pin
+	usleep(structure->span - strucutre->fill);
     }
     printf("thread stopped for pin %d\n", structure->pin);
     return;
