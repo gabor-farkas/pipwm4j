@@ -77,8 +77,10 @@ JNIEXPORT void JNICALL Java_pipwm4j_Pwm_doPwm(JNIEnv *env, jobject thisObj, jlon
     PwmControl * structure = (PwmControl *) (int) hControlStructure;
     printf("thread started for pin %d\n", structure->pin);
     while (!structure->stop) {
-	GPIO_SET = 1 << structure->pin;
-	usleep(structure->fill);
+	if (structure->fill > 0) {
+    	    GPIO_SET = 1 << structure->pin;
+	    usleep(structure->fill);
+	}
 	GPIO_CLR = 1 << structure->pin;
 	usleep(structure->span - structure->fill);
     }
